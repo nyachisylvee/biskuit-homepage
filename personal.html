@@ -532,24 +532,66 @@
     </div>
 
     <script>
-        // Track the rAF/interval handles for progress updates
-        var progressIntervals = {};
+    var progressIntervals = {};
 
-        /**
-         * Resets a track row back to its idle state.
-         * Called when: user pauses, another track plays, or audio ends.
-         */
-        function resetTrack(audioId, rowId) {
-            var row  = document.getElementById(rowId);
-            var btn  = document.getElementById('btn-' + audioId);
-            var prog = document.getElementById('prog-' + audioId);
+    function resetTrack(audioId, rowId) {
+        var row  = document.getElementById(rowId);
+        var btn  = document.getElementById('btn-' + audioId);
+        var prog = document.getElementById('prog-' + audioId);
+        row.classList.remove('active-playing-strip');
+        btn.textContent = 'Play';
+        if (prog) prog.style.width = '0%';
+        if (progressIntervals[audioId]) {
+            clearInterval(progressIntervals[audioId]);
+            delete progressIntervals[audioId];
+        }
+    }
 
-            row.classList.remove('active-playing-strip');
-            btn.textContent = 'Play';
+    function startProgress(audioId) {
+        var audio = document.getElementById(audioId);
+        var prog  = document.getElementById('prog-' + audioId);
+        if (!prog || !audio) return;
+        if (progressIntervals[audioId]) clearInterval(progressIntervals[audioId]);
+        progressIntervals[audioId] = setInterval(function () {
+            if (!audio.duration) return;
+            prog.style.width = ((audio.currentTime / audio.duration) * 100) + '%';
+        }, 300);
+    }
 
-            if (prog) prog.style.width = '0%';
+    ['audio1', 'audio2'].forEach(function (id) {
+        document.getElementById(id).addEventListener('ended', function () {
+            resetTrack(id, id.replace('audio', 'row'));
+        });
+    });
 
-            // Clear the progress interval
-            if (progressIntervals[audioId]) {
-                clearInterval(progressIntervals[audioId]);
- 
+    function togglePlay(audioId, rowId) {
+        var audio = document.getElementById(audioId);
+        var row   = document.getElementById(rowId);
+        var btn   = document.getElementById('btn-' + audioId);
+
+        document.querySelectorAll('audio').forEach(function (track) {
+            if (track.id !== audioId) {
+                track.pause();
+                track.currentTime = 0;
+                resetTrack(track.id, track.id.replace('audio', 'row'));
+            }
+        });
+
+        if (audio.paused) {
+            // Properly handle the Promise audio.play() returns
+            var playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(function () {
+                    row.classList.add('active-playing-strip');
+                    btn.textContent = 'Pause';
+                    startProgress(audioId);
+                }).catch(function (err) {
+                    console.error('Playback failed:', err);
+                });
+            }
+        } else {
+            audio.pause();
+            resetTrack(audioId, rowId);
+        }
+    }
+    </script>
