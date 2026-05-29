@@ -242,55 +242,96 @@
         /* Desktop Adjustments */
         @media (min-width: 768px) {
             .profile-card {
-                flex-direction: row;
-                text-align: left;
-                gap: 30px;
-            }
-            .profile-avatar {
-                width: 140px;
-                height: 140px;
-            }
-            .details-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nekogram Profile - biskuit :3</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-    </style>
-</head>
-<body>
 
-    <div class="wrapper">
-        
-        <header class="nav-header">
-            <a href="./index.html" class="back-btn">← Back to Hub</a>
-            <span style="font-size: 0.85rem; opacity: 0.7; font-family: monospace;">interactive_v1.0</span>
-        </header>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #101721; /* Classic deep Telegram dark background, owo */
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+        }
 
-        <section class="profile-card">
-            <img src="avatar.png" alt="Cookie Avatar" class="profile-avatar">
-            <div class="profile-info">
-                <h1>Cookie :3</h1>
-                <div class="tag">Tech Enthusiast</div>
-                <p class="profile-bio">
-                    Welcome to my little digital space! I love tweaking alternative operating systems, reverse engineering legacy hardware, modding physics simulations, and capturing awesome motion graphic concepts.
-                </p>
-            </div>
-        </section>
+        .wrapper {
+            width: 100%;
+            max-width: 550px; /* Perfectly slim mobile layout to match the app, nyaa~! */
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
 
-        <div class="click-hint">✨ Tap the panels below to slide open the interactive drawers! ✨</div>
+        /* Top Bar Navigation Component */
+        .app-bar {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 12px 4px;
+        }
 
-        <main class="details-grid">
-            
-            <input type="checkbox" id="tab1" class="tab-input">
-            <label for="tab1" class="interactive-box">
-                <div class="box-header">
-                    <h2>Interests & Things</h2>
-                    <span class="arrow-indicator">▼</span>
-                </div>
-                <div class="drawer-content">
-                    <ul class="info-list">
-                        <li><span class="label">Gaming focus:</span><span class="value">Tactical Shooties & Space Sim</span></li>
-                        <li><span class="label">Operating systems:</span><span class="value">Win10 LTSC IoT / Custom Linux</span></li>
-                        <li><span class="label">Creative studio:</span><span class="value">Alight Motion / Legacy 3D</span></li>
+        .back-arrow {
+            color: #5288c1; /* Iconic Nekogram blue accent color, uwu */
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: bold;
+            transition: transform 0.2s ease;
+        }
+
+        .back-arrow:hover {
+            transform: translateX(-3px);
+        }
+
+        /* Profile Header Block */
+        .profile-header {
+            background: #17212b; /* Slightly lighter chat panel background, owo */
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border-bottom: 1px solid #24303f;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 12px;
+            border: 2px solid #5288c1;
+        }
+
+        .user-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .presence-status {
+            font-size: 0.85rem;
+            color: #5288c1; /* Online blue text status indicator, nyaa~! */
+            margin-bottom: 8px;
+        }
+
+        .user-id-badge {
+            font-family: monospace;
+            font-size: 0.
+
+ve studio:</span><span class="value">Alight Motion / Legacy 3D</span></li>
                         <li><span class="label">Hardware focus:</span><span class="value">Legacy Mobile / Bootloader Unlocks</span></li>
                     </ul>
                 </div>
