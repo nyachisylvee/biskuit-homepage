@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nekogram Profile - biskuit :3</title>
+    <title>Material Profile - biskuit :3</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght,GRAD@8..144,25..151,100..1000,-200..150&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -11,162 +14,242 @@
             padding: 0;
         }
 
+        :root {
+            /* M3 Dark Expressive Color Palette Tokens, uwu */
+            --md-sys-color-background: #121318;
+            --md-sys-color-surface: #1b1b1f;
+            --md-sys-color-surface-variant: #242429;
+            --md-sys-color-primary: #adc6ff;
+            --md-sys-color-on-primary: #002e69;
+            --md-sys-color-primary-container: #1d4485;
+            --md-sys-color-on-primary-container: #d8e2ff;
+            --md-sys-color-secondary-container: #3c4659;
+            --md-sys-color-on-secondary-container: #d8e2ff;
+            --md-sys-color-on-surface: #e3e2e6;
+            --md-sys-color-on-surface-variant: #c4c6d0;
+            --md-sys-color-outline: #8e9099;
+            
+            /* M3 Easing Tokens (Bouncy Expressive Elastic), owo */
+            --md-easing-emphasized: cubic-bezier(0.2, 0.0, 0.0, 1.0);
+            --md-easing-expressive: cubic-bezier(0.3, 0.0, 0.4, 1.3);
+            --md-easing-linear: linear;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #17212b; /* Exact Nekogram dark mode workspace background, owo */
-            color: #ffffff;
+            font-family: 'Roboto Flex', sans-serif;
+            background-color: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-surface);
             min-height: 100vh;
             display: flex;
             justify-content: center;
+            padding: 16px;
+            overflow-x: hidden;
         }
 
         .wrapper {
             width: 100%;
-            max-width: 550px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Top Bar Component matching app layout */
-        .app-bar {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            padding: 14px 16px;
-            background: #17212b;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .back-arrow {
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 1.4rem;
-            font-weight: bold;
-        }
-
-        .app-bar-title {
-            font-size: 1.25rem;
-            font-weight: 500;
-        }
-
-        /* Profile Block Header Container */
-        .profile-section {
-            background: #17212b;
-            padding: 10px 16px 20px 16px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            border-bottom: 4px solid #0e1621; /* Separation bar channel, nyaa~! */
-        }
-
-        .profile-pic {
-            width: 76px;
-            height: 76px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .profile-meta {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .user-name {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .presence-status {
-            font-size: 0.85rem;
-            color: #5288c1; /* App-accurate blue status text, uwu */
-        }
-
-        .user-id-badge {
-            font-size: 0.8rem;
-            color: #7f8c9a;
-            margin-top: 2px;
-        }
-
-        /* Full Custom Account Info Details Section */
-        .info-section {
-            background: #17212b;
-            padding: 16px;
+            max-width: 500px;
             display: flex;
             flex-direction: column;
             gap: 16px;
-            border-bottom: 4px solid #0e1621;
+            /* Entrance layout reveal animation sequence */
+            animation: m3-fade-in 0.8s var(--md-easing-emphasized);
         }
 
-        .info-section-title {
-            font-size: 0.95rem;
-            font-weight: bold;
-            color: #5288c1;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        @keyframes m3-fade-in {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .info-grid {
+        /* M3 App Header component */
+        .app-bar {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 4px;
+        }
+
+        .back-icon-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--md-sys-color-on-surface);
+            text-decoration: none;
+            font-size: 1.3rem;
+            transition: background-color 0.2s var(--md-easing-linear);
+        }
+
+        .back-icon-btn:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .back-icon-btn:active {
+            background-color: rgba(255, 255, 255, 0.16);
+            transform: scale(0.92);
+        }
+
+        .app-bar-title {
+            font-size: 1.4rem;
+            font-weight: 400;
+            font-stretch: 110%; /* Roboto Flex layout feature, owo */
+        }
+
+        /* Profile Expressive Hero Card Layer */
+        .profile-card {
+            background-color: var(--md-sys-color-surface-variant);
+            border-radius: 28px; /* M3 Large Content Rounding token, uwu */
+            padding: 24px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.4s var(--md-easing-expressive);
         }
 
-        .info-row {
+        .profile-card:hover {
+            transform: scale(1.02) translateY(-4px);
+        }
+
+        /* Floating background decorative aura to feel expressive, nyaa~! */
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(173,198,255,0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .avatar-container {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .profile-pic {
+            width: 104px;
+            height: 104px;
+            border-radius: 24px; /* Squircle design profile layout token, owo */
+            object-fit: cover;
+            border: 2px solid var(--md-sys-color-primary);
+            transition: transform 0.6s var(--md-easing-expressive);
+        }
+
+        .profile-card:hover .profile-pic {
+            transform: scale(1.1) rotate(4deg) font-weight(800);
+        }
+
+        /* Interactive active presence indicator node */
+        .online-dot {
+            width: 14px;
+            height: 14px;
+            background-color: #b4ffd0;
+            border: 3px solid var(--md-sys-color-surface-variant);
+            border-radius: 50%;
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .user-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            font-stretch: 120%;
+            color: var(--md-sys-color-on-surface);
+            letter-spacing: -0.5px;
+        }
+
+        .user-id {
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: var(--md-sys-color-on-surface-variant);
+            margin-top: 4px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 4px 12px;
+            border-radius: 100px;
+        }
+
+        /* M3 Style Data Information Block Container */
+        .m3-card {
+            background-color: var(--md-sys-color-surface);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 28px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--md-sys-color-primary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .info-item {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            padding-bottom: 8px;
+            align-items: center;
+            padding-bottom: 10px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            transition: transform 0.2s ease;
+        }
+
+        .info-item:hover {
+            transform: translateX(4px);
         }
 
         .info-label {
-            font-size: 0.9rem;
-            color: #7f8c9a;
+            font-size: 0.95rem;
+            color: var(--md-sys-color-on-surface-variant);
             font-weight: 500;
         }
 
         .info-value {
             font-size: 0.95rem;
-            color: #f5f5f5;
+            color: var(--md-sys-color-on-surface);
+            font-weight: 600;
             text-align: right;
-            max-width: 65%;
-            font-family: monospace;
         }
 
-        /* Playlist Interface Component */
-        .playlist-section {
-            background: #17212b;
-            padding: 16px;
-            flex-grow: 1;
-        }
-
-        .playlist-header {
-            font-size: 0.95rem;
-            font-weight: bold;
-            color: #5288c1;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 16px;
-        }
-
-        /* Audio Track Strip Row Components */
+        /* M3 Interactive Music Track System Elements, owo */
         .track-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 8px;
-            border-radius: 8px;
+            padding: 14px;
+            border-radius: 20px; /* M3 Medium shape rounding, nyaa~ */
+            background-color: var(--md-sys-color-surface-variant);
             cursor: pointer;
             user-select: none;
-            transition: background 0.15s ease;
-            margin-bottom: 6px;
+            transition: background-color 0.3s var(--md-easing-emphasized), transform 0.3s var(--md-easing-expressive);
+            margin-bottom: 8px;
         }
 
         .track-item:hover {
-            background: #202b36;
+            background-color: #2e3036;
+            transform: scale(1.01) translateX(2px);
         }
 
         .track-left {
@@ -176,55 +259,62 @@
             width: 85%;
         }
 
-        /* Clean app styled rectangular action button node */
+        /* Premium Text Action Button Element */
         .play-action-btn {
-            background: #2b394a;
-            color: #5288c1;
+            background-color: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
             border: none;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: bold;
+            padding: 8px 18px;
+            border-radius: 100px; /* Fully pill-shaped layout token, uwu */
+            font-size: 0.85rem;
+            font-weight: 700;
             text-transform: uppercase;
-            min-width: 70px;
+            letter-spacing: 0.8px;
+            min-width: 84px;
             text-align: center;
-            letter-spacing: 0.5px;
+            transition: all 0.3s var(--md-easing-expressive);
         }
 
         .track-details {
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            white-space: nowrap;
         }
 
         .track-name {
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: #ffffff;
-            text-overflow: ellipsis;
-            overflow: hidden;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--md-sys-color-on-surface);
+            /* Dynamically alters variable fonts on focus event triggers! */
+            transition: font-weight 0.3s ease;
         }
 
         .track-artist {
             font-size: 0.8rem;
-            color: #7f8c9a;
+            color: var(--md-sys-color-on-surface-variant);
             margin-top: 2px;
         }
 
-        .track-right-drag {
-            font-size: 1.2rem;
-            color: #2b394a;
+        .track-right-indicator {
+            font-size: 1rem;
+            color: var(--md-sys-color-outline);
+            opacity: 0.5;
         }
 
-        /* Interactive Active Audio Row Glow Tints */
+        /* Active Audio Player States mapping layout animations */
         .playing-row {
-            background: rgba(82, 136, 193, 0.08) !important;
+            background-color: var(--md-sys-color-secondary-container) !important;
+            transform: scale(1.02);
         }
         
         .playing-row .play-action-btn {
-            background: #5288c1 !important;
-            color: #ffffff !important;
+            background-color: var(--md-sys-color-primary) !important;
+            color: var(--md-sys-color-on-primary) !important;
+            box-shadow: 0 2px 8px rgba(173,198,255,0.3);
+        }
+
+        .playing-row .track-name {
+            font-weight: 900; /* Font flexing weight explosion, nyaa~! */
+            color: var(--md-sys-color-primary);
         }
     </style>
 </head>
@@ -233,43 +323,43 @@
     <div class="wrapper">
         
         <header class="app-bar">
-            <a href="./index.html" class="back-arrow">←</a>
-            <span class="app-bar-title">Nekogram Profile</span>
+            <a href="./index.html" class="back-icon-btn">←</a>
+            <span class="app-bar-title">Overview</span>
         </header>
 
-        <section class="profile-section">
-            <img src="avatar.png" alt="Profile Picture" class="profile-pic">
-            <div class="profile-meta">
-                <h1 class="user-name">biskuit :3</h1>
-                <div class="presence-status">online</div>
-                <div class="user-id-badge">ID: 8268853919, DC: 5</div>
+        <section class="profile-card">
+            <div class="avatar-container">
+                <img src="avatar.png" alt="Cookie squircle avatar" class="profile-pic">
+                <div class="online-dot"></div>
             </div>
+            <h1 class="user-name">biskuit :3</h1>
+            <div class="user-id">ID: 8268853919 • DC: 5</div>
         </section>
 
-        <section class="info-section">
-            <h2 class="info-section-title">Info</h2>
-            <div class="info-grid">
-                <div class="info-row">
-                    <span class="info-label">Gaming Profile</span>
+        <section class="m3-card">
+            <h2 class="card-title">Profile Info</h2>
+            <div class="info-list">
+                <div class="info-item">
+                    <span class="info-label">Gaming Focus</span>
                     <span class="info-value">Tactical Shooties & Space Sim</span>
                 </div>
-                <div class="info-row">
+                <div class="info-item">
                     <span class="info-label">Environments</span>
                     <span class="info-value">Win10 LTSC IoT / Linux Core</span>
                 </div>
-                <div class="info-row">
+                <div class="info-item">
                     <span class="info-label">Creative Engine</span>
                     <span class="info-value">Alight Motion / Legacy 3D</span>
                 </div>
-                <div class="info-row">
-                    <span class="info-label">Projects Node</span>
+                <div class="info-item">
+                    <span class="info-label">Project Sandbox</span>
                     <span class="info-value">Fictional OS UI Blueprint</span>
                 </div>
             </div>
         </section>
 
-        <main class="playlist-section">
-            <h2 class="playlist-header">Your Playlist</h2>
+        <main class="m3-card">
+            <h2 class="card-title">Expressive Player</h2>
 
             <audio id="audio1" src="clouds.mp3" preload="none"></audio>
             <audio id="audio2" src="dismiss.mp3" preload="none"></audio>
@@ -282,7 +372,7 @@
                         <span class="track-artist">0vvv0</span>
                     </div>
                 </div>
-                <div class="track-right-drag">＝</div>
+                <div class="track-right-indicator">──</div>
             </div>
 
             <div id="row2" class="track-item" onclick="togglePlay('audio2', 'row2')">
@@ -293,7 +383,7 @@
                         <span class="track-artist">0vvv0</span>
                     </div>
                 </div>
-                <div class="track-right-drag">＝</div>
+                <div class="track-right-indicator">──</div>
             </div>
 
         </main>
@@ -310,7 +400,6 @@
             var allRows = document.querySelectorAll('.track-item');
             var allBtns = document.querySelectorAll('.play-action-btn');
             
-            // Instantly clear out alternative channels
             allAudios.forEach(function(track) {
                 if(track.id !== audioId) {
                     track.pause();
@@ -326,7 +415,6 @@
                 if(b.id !== 'btn-' + audioId) b.textContent = 'Play';
             });
 
-            // Switch active target node execution loop
             if (audio.paused) {
                 audio.play();
                 row.classList.add('playing-row');
