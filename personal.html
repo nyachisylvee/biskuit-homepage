@@ -268,4 +268,76 @@
             </div>
         </section>
 
-        <main class="playlist
+        <main class="playlist-section">
+            <h2 class="playlist-header">Your Playlist</h2>
+
+            <audio id="audio1" src="clouds.mp3" preload="none"></audio>
+            <audio id="audio2" src="dismiss.mp3" preload="none"></audio>
+
+            <div id="row1" class="track-item" onclick="togglePlay('audio1', 'row1')">
+                <div class="track-left">
+                    <button class="play-action-btn" id="btn-audio1">Play</button>
+                    <div class="track-details">
+                        <span class="track-name">Clouds. F 172bpm 450hz</span>
+                        <span class="track-artist">0vvv0</span>
+                    </div>
+                </div>
+                <div class="track-right-drag">＝</div>
+            </div>
+
+            <div id="row2" class="track-item" onclick="togglePlay('audio2', 'row2')">
+                <div class="track-left">
+                    <button class="play-action-btn" id="btn-audio2">Play</button>
+                    <div class="track-details">
+                        <span class="track-name">Dismiss. Fm 153bpm 430hz</span>
+                        <span class="track-artist">0vvv0</span>
+                    </div>
+                </div>
+                <div class="track-right-drag">＝</div>
+            </div>
+
+        </main>
+
+    </div>
+
+    <script>
+        function togglePlay(audioId, rowId) {
+            var audio = document.getElementById(audioId);
+            var row = document.getElementById(rowId);
+            var btn = document.getElementById('btn-' + audioId);
+            
+            var allAudios = document.querySelectorAll('audio');
+            var allRows = document.querySelectorAll('.track-item');
+            var allBtns = document.querySelectorAll('.play-action-btn');
+            
+            // Instantly clear out alternative channels
+            allAudios.forEach(function(track) {
+                if(track.id !== audioId) {
+                    track.pause();
+                    track.currentTime = 0;
+                }
+            });
+            
+            allRows.forEach(function(r) {
+                if(r.id !== rowId) r.classList.remove('playing-row');
+            });
+            
+            allBtns.forEach(function(b) {
+                if(b.id !== 'btn-' + audioId) b.textContent = 'Play';
+            });
+
+            // Switch active target node execution loop
+            if (audio.paused) {
+                audio.play();
+                row.classList.add('playing-row');
+                btn.textContent = 'Pause';
+            } else {
+                audio.pause();
+                row.classList.remove('playing-row');
+                btn.textContent = 'Play';
+            }
+        }
+    </script>
+
+</body>
+</html>
