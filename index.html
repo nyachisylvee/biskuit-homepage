@@ -9,67 +9,282 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght,GRAD@8..144,25..151,100..1000,-200..150&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
+
         :root {
-            --md-bg: #0c0f14; --md-surface: #161920; --md-surface-variant: #1e232d;
-            --md-primary: #adc6ff; --md-on-surface: #e3e2e6; --md-variant: #c4c6d0;
-            --md-ease-expressive: cubic-bezier(0.34, 1.56, 0.64, 1);
+            /* ── M3 Expressive Deep Dark Color Tokens ── */
+            --md-bg:                      #0c0f14;
+            --md-surface:                 #161920;
+            --md-surface-variant:         #1e232d;
+            --md-surface-container:       #1a1e27;
+            --md-surface-container-high:  #22273180;
+
+            /* Primary */
+            --md-primary:                 #adc6ff;
+            --md-on-primary:              #002e69;
+            --md-primary-container:       #2b447a;
+            --md-on-primary-container:    #d8e2ff;
+
+            /* Secondary */
+            --md-secondary:               #c3c8e0;
+            --md-on-secondary:            #2d3246;
+            --md-secondary-container:     #444b62;
+            --md-on-secondary-container:  #dfe3fb;
+
+            /* Neutral */
+            --md-on-surface:              #e3e2e6;
+            --md-variant:                 #c4c6d0;
+            --md-outline-variant:         #44474f;
+
+            /* ── M3 Expressive Motion Physics ── */
+            --md-ease-spring:             cubic-bezier(0.34, 1.56, 0.64, 1);
+            --md-ease-standard:           cubic-bezier(0.2, 0, 0, 1);
+            --md-ease-emphasized:         cubic-bezier(0.05, 0.7, 0.1, 1.0);
         }
-        body { font-family: 'Roboto Flex', sans-serif; background-color: var(--md-bg); color: var(--md-on-surface); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .hub-container { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 24px; }
-        
-        .brand-hero { background: rgba(22, 25, 32, 0.65); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 36px 12px 36px 36px; padding: 24px; display: flex; align-items: center; gap: 20px; }
-        .avatar-node { width: 76px; height: 76px; border-radius: 28px 12px 28px 28px; object-fit: cover; border: 2px solid var(--md-primary); }
-        .hub-main-title { font-size: 1.8rem; font-weight: 900; color: #ffffff; }
-        
-        .section-box { background: rgba(22, 25, 32, 0.75); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 28px; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
-        .category-header { font-size: 0.85rem; font-weight: 900; color: var(--md-primary); text-transform: uppercase; letter-spacing: 2px; }
-        
-        .reveal-glow-btn { position: relative; background: var(--md-surface); border: 2px solid transparent; border-radius: 18px 6px 18px 18px; padding: 16px 24px; text-decoration: none; color: #ffffff; cursor: pointer; overflow: hidden; transition: 0.3s; }
-        .reveal-glow-btn::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: inherit; padding: 2px; background: radial-gradient(circle 130px at var(--mouse-x, 0) var(--mouse-y, 0), rgba(173, 198, 255, 0.35), transparent 80%); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask-composite: exclude; pointer-events: none; opacity: 0; transition: opacity 0.4s ease; }
+
+        body {
+            font-family: 'Roboto Flex', sans-serif;
+            background-color: var(--md-bg);
+            color: var(--md-on-surface);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .hub-container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* ── Staggered M3 Expressive Entrance ── */
+        .hub-container > * {
+            animation: hub-entrance var(--md-ease-emphasized) both;
+        }
+        .hub-container > *:nth-child(1) { animation-duration: 0.45s; animation-delay: 0ms;   }
+        .hub-container > *:nth-child(2) { animation-duration: 0.55s; animation-delay: 85ms;  }
+        .hub-container > *:nth-child(3) { animation-duration: 0.65s; animation-delay: 165ms; }
+
+        @keyframes hub-entrance {
+            from { opacity: 0; transform: scale(0.94) translateY(28px); }
+            to   { opacity: 1; transform: scale(1)    translateY(0);    }
+        }
+
+        /* ── Brand Hero ── */
+        .brand-hero {
+            background: rgba(22, 25, 32, 0.85);
+            /* Both prefixed and standard for Safari compat */
+            -webkit-backdrop-filter: blur(24px);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 36px 12px 36px 36px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition:
+                border-radius 0.55s var(--md-ease-spring),
+                transform     0.45s var(--md-ease-spring),
+                box-shadow    0.35s var(--md-ease-standard);
+        }
+
+        .brand-hero:hover {
+            border-radius: 36px 36px 12px 36px;
+            transform: scale(1.015);
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.28);
+        }
+
+        .avatar-node {
+            width: 76px;
+            height: 76px;
+            border-radius: 28px 12px 28px 28px;
+            object-fit: cover;
+            border: 2px solid var(--md-primary);
+            flex-shrink: 0;
+            transition:
+                border-radius 0.55s var(--md-ease-spring),
+                transform     0.55s var(--md-ease-spring);
+        }
+
+        .brand-hero:hover .avatar-node {
+            border-radius: 12px 28px 12px 12px;
+            transform: rotate(8deg) scale(1.07);
+        }
+
+        .title-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .hub-main-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            font-variation-settings: 'wdth' 130;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+
+        /* ── hub-subtitle: was completely unstyled → fixed ── */
+        .hub-subtitle {
+            font-size: 0.9rem;
+            font-weight: 500;
+            font-variation-settings: 'wdth' 105;
+            color: var(--md-primary);
+            opacity: 0.85;
+            letter-spacing: 0.3px;
+        }
+
+        /* ── Section Boxes ── */
+        .section-box {
+            background: rgba(22, 25, 32, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 28px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .category-header {
+            font-size: 0.78rem;
+            font-weight: 900;
+            font-variation-settings: 'wdth' 110;
+            color: var(--md-primary);
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* ── Reveal Glow Button ── */
+        /* The spotlight follows the mouse via CSS custom properties set in JS */
+        .reveal-glow-btn {
+            position: relative;
+            background: var(--md-surface);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 18px 6px 18px 18px;
+            padding: 16px 24px;
+            text-decoration: none;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 0.98rem;
+            font-weight: 600;
+            display: block;
+            overflow: hidden;
+            transition:
+                background    0.3s  var(--md-ease-spring),
+                border-radius 0.45s var(--md-ease-spring),
+                transform     0.35s var(--md-ease-spring),
+                box-shadow    0.3s  var(--md-ease-standard),
+                border-color  0.3s  var(--md-ease-standard);
+        }
+
+        /* Radial glow that tracks the mouse pointer */
+        .reveal-glow-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: radial-gradient(
+                circle 120px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(173, 198, 255, 0.42),
+                transparent 75%
+            );
+            /* Punch out the fill so only the border glows */
+            -webkit-mask: linear-gradient(#fff 0 0) content-box,
+                          linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+
         .reveal-glow-btn:hover::before { opacity: 1; }
-        .reveal-glow-btn:hover { background: var(--md-surface-variant); transform: scale(1.02); }
-        
-        /* New Extra Styles, nyaa~! */
-        .legacy-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 18px; padding: 16px 24px; text-decoration: none; color: var(--md-variant); text-align: center; font-weight: 600; transition: 0.3s; }
-        .legacy-btn:hover { background: rgba(255, 255, 255, 0.06); color: var(--md-primary); }
+
+        /* Shape morphs on hover — M3 Expressive asymmetric flip */
+        .reveal-glow-btn:hover {
+            background: var(--md-surface-variant);
+            border-radius: 6px 18px 18px 18px;
+            transform: scale(1.025);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22);
+            border-color: rgba(173, 198, 255, 0.12);
+        }
+
+        /* ── Legacy / subdued link ── */
+        .legacy-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 18px;
+            padding: 16px 24px;
+            text-decoration: none;
+            color: var(--md-variant);
+            text-align: center;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: block;
+            transition:
+                background 0.3s var(--md-ease-spring),
+                color      0.3s var(--md-ease-spring),
+                transform  0.3s var(--md-ease-spring);
+        }
+
+        .legacy-btn:hover {
+            background: rgba(255, 255, 255, 0.07);
+            color: var(--md-primary);
+            transform: scale(1.015);
+        }
     </style>
 </head>
 <body>
     <div class="hub-container">
+
         <header class="brand-hero">
             <img src="avatar.png" alt="Cookie" class="avatar-node">
             <div class="title-meta">
                 <h1 class="hub-main-title">Cookie :3</h1>
-                <span class="hub-subtitle" style="color:var(--md-primary)">Website Hub</span>
+                <!-- Using <p> instead of <span> — proper semantic element for subtitle -->
+                <p class="hub-subtitle">Website Hub</p>
             </div>
         </header>
 
         <section class="section-box">
             <h2 class="category-header">Main Section</h2>
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-                <a href="https://linktr.ee/Smg5official55" target="_blank" class="reveal-glow-btn">Linktree ↗</a>
+            <div class="btn-group">
+                <a href="https://linktr.ee/Smg5official55" target="_blank" rel="noopener noreferrer" class="reveal-glow-btn">Linktree ↗</a>
                 <a href="./personal.html" class="reveal-glow-btn">Personal →</a>
             </div>
         </section>
 
         <section class="section-box">
             <h2 class="category-header">Extra</h2>
-            <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="btn-group">
                 <a href="./index-fallback.html" class="reveal-glow-btn">Fallback</a>
-                <a href="https://nyawh.my.canva.site/cookie-mainweb" target="_blank" class="legacy-btn">Legacy Version</a>
+                <a href="https://nyawh.my.canva.site/cookie-mainweb" target="_blank" rel="noopener noreferrer" class="legacy-btn">Legacy Version</a>
             </div>
         </section>
+
     </div>
 
     <script>
-        document.querySelectorAll('.reveal-glow-btn').forEach(btn => {
-            btn.addEventListener('mousemove', (e) => {
-                const rect = btn.getBoundingClientRect();
-                btn.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-                btn.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+        // Update the CSS custom property --mouse-x/y on each button
+        // so the radial glow in ::before tracks the cursor exactly
+        document.querySelectorAll('.reveal-glow-btn').forEach(function (btn) {
+            btn.addEventListener('mousemove', function (e) {
+                var rect = btn.getBoundingClientRect();
+                btn.style.setProperty('--mouse-x', (e.clientX - rect.left) + 'px');
+                btn.style.setProperty('--mouse-y', (e.clientY - rect.top)  + 'px');
             });
         });
     </script>
 </body>
-</ht
-    ml>
+</html>
