@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRT Engine Matrix</title>
+  <style>
+    body { background:#141218; color:#e6e1e5; font-family:system-ui, sans-serif; margin:0; padding:16px; font-size:13px; }
+    h2 { margin:0 0 16px 0; color:#d0bcff; font-size:20px; font-weight:700; text-align:center; }
+    canvas { width:100%; background:#000; border-radius:12px; border:1px solid #49454f; display:block; margin-bottom:16px; box-shadow:0 8px 24px rgba(0,0,0,0.5); }
+    .row { display:flex; align-items:center; margin-bottom:12px; }
+    .row label { width:130px; font-weight:600; color:#eaddff; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; }
+    .row input { flex:1; accent-color:#d0bcff; height:4px; outline:none; }
+    .row span { width:35px; text-align:right; font-family:monospace; color:#938f99; }
+    .btn-group { display:flex; gap:8px; margin-bottom:16px; }
+    button { flex:1; padding:12px; border-radius:100px; border:none; background:#4f378b; color:#fff; font-weight:bold; cursor:pointer; font-size:13px; transition:0.1s; }
+    button:active { transform:scale(0.95); }
+    button.alt { background:#2b2930; color:#e6e1e5; border:1px solid #49454f; }
+    .panel { background:#1d1b20; padding:20px 20px 8px; border-radius:16px; border:1px solid #2b2930; }
+  </style>
+</head>
+<body>
+
+<div style="max-width:640px; margin:0 auto;">
+  <h2>Hardware Emissive Engine</h2>
+  <div class="btn-group">
+    <button onclick="document.getElementById('file-img').click()">📷 Photo</button>
+    <button onclick="document.getElementById('file-vid').click()">📹 Video</button>
+    <button class="alt" onclick="save()">💾 Export</button>
+  </div>
+  <canvas id="out"></canvas>
+  <div class="panel" id="ui"></div>
+</div>
+
+<input type="file" id="file-img" accept="image/*" style="display:none" onchange="load(this, false)">
+<input type="file" id="file-vid" accept="video/*" style="display:none" onchange="load(this, true)">
+
+<script>
+const C = document.getElementById('out'), ctx = C.getContext('2d', { willReadFrequently: true });
+let src = null, isVid = false, raf;
+
+const S = {
+  curve: { l:"CRT Stretch", min:0, max:0.3, v:0.15, step:0.01 },
+  decay: { l:"Phosphor Trail", min:0, max:0.9, v:0.3, step:0.05 },
+  px: { l:"Subpixel Size", min:1, max:8, v:3, step:1 },
+  mask: { l:"Mask Opacity", min:0, max:1, v:0.8, step:0.05 },
+  scan: { l:"Scanline Depth", min:0, max:1, v:0.5, step:0.05 },
+  chroma: { l:"Color Bleed", min:0, max:10, v:3, step:0.5 },
+  bright: { l:"Brightness", min:0.5, max:2, v:1.2, step:0.05 },
+  glow: { l:"Screen Glow", min:0, max:1, v:0.4, step:0.05 },
+  sat: { l:"Saturation", min:0, max:2, v:1.2, step:0.05 },
+  vig: { l:"Vignette", min:0, max:1, v:0.6, step:0.05 }
+};
+
+const ui = document.getElementById('ui');
+for (let k in S) {
+  ui.innerHTML += `<div class="row"><label>${S[k].l}</label>
+    <input type="range" min="${S[k].min}" max="${S[k].max}" step="${S[k].step}" value="${S[k].v}" oninput="update('${k}', this.value)">
+    <span id="v-${k}">${S[k].v}</span></div>`;
+}
+
+function update(k, v) { S[k].v = Number(v); document.getElementById(`v-${k}`).innerText = v; if(!isVid) render(); }
+
+function load(inp, isVideo) {
+  if(!inp.files[0]) return;
+  if(src && isVid) { src.pause(); src.src = ""; }
+  cancelAnimationFrame(raf);
+  isVid = isVideo;
+  let url = URL.createObjectURL(inp.files[0]);
+  if(isVid) {
+    src = document.createElement('video');
+    src.muted = src.loop = src.playsInline = true;
+    src.src = url;
+    src.onloadeddata = () => { src.play(); loop(); }
+  } else {
+    src = new Image(); src.onload = loop; src.src = url;
+  }
+}
+
+function loop() {
+  if(!src) return;
+  render();
+  if(isVid) raf = requestAnimationFrame(loop);
+}
+
+function render() {
+  let rw = src.videoWidth || src.naturalWidth, rh = src.videoHeight || src.naturalHeight;
+  if(!rw) return;
+  let scale = Math.min(760/rw, 760/rh, 1);
+  let w = Math.round(rw * scale), h = Math.round(rh * scale);
+  if(C.width !== w) { C.width = w; C.height = h; }
+
+  let oc = document.createElement('canvas'); oc.width = w; oc.height = h;
+  let oCtx = oc.getContext('2d'); oCtx.drawImage(src, 0, 0, w, h);
+  let iD = oCtx.getImageData(0,0,w,h).data;
+
+  let out = oCtx.createImageData(w,h), d = out.data;
+  let cx = w/2, cy = h/2, k = S.curve.v;
+
+  for(let y=0; y<h; y++) {
+    for(let x=0; x<w; x++) {
+      let sx=x, sy=y;
+      if(k > 0) {
+        let nx = (x-cx)/cx, ny = (y-cy)/cy;
+        let dist = 1 + k * (nx*nx + ny*ny);
+        sx = Math.round(nx*dist*cx + cx); sy = Math.round(ny*dist*cy + cy);
+      }
+      let idx = (y*w+x)*4;
+      if(sx>=0 && sx<w && sy>=0 && sy<h) {
+        let ro = Math.round(S.chroma.v);
+        let sR = Math.min(w-1, Math.max(0, sx-ro)), sB = Math.min(w-1, Math.max(0, sx+ro));
+        let r = iD[(sy*w+sR)*4] * S.bright.v, g = iD[(sy*w+sx)*4+1] * S.bright.v, b = iD[(sy*w+sB)*4+2] * S.bright.v;
+        let luma = 0.299*r + 0.587*g + 0.114*b;
+        d[idx] = luma + (r-luma)*S.sat.v; d[idx+1] = luma + (g-luma)*S.sat.v; d[idx+2] = luma + (b-luma)*S.sat.v; d[idx+3] = 255;
+      } else { d[idx+3] = 255; }
+    }
+  }
+  oCtx.putImageData(out, 0, 0);
+
+  if(S.mask.v > 0) {
+    let ps = S.px.v, mc = document.createElement('canvas'); mc.width = ps*3; mc.height = ps;
+    let mCtx = mc.getContext('2d'), inv = 255 * (1-S.mask.v);
+    mCtx.fillStyle = `rgb(${inv},${inv},${inv})`; mCtx.fillRect(0,0,ps*3,ps);
+    mCtx.fillStyle = `rgb(255,${inv},${inv})`; mCtx.fillRect(0,0,ps,ps);
+    mCtx.fillStyle = `rgb(${inv},255,${inv})`; mCtx.fillRect(ps,0,ps,ps);
+    mCtx.fillStyle = `rgb(${inv},${inv},255)`; mCtx.fillRect(ps*2,0,ps,ps);
+    oCtx.globalCompositeOperation = 'multiply'; oCtx.fillStyle = oCtx.createPattern(mc, 'repeat'); oCtx.fillRect(0,0,w,h);
+  }
+
+  if(S.scan.v > 0) {
+    let sc = document.createElement('canvas'); sc.width = 1; sc.height = 3;
+    let sCtx = sc.getContext('2d'); sCtx.fillStyle = `rgba(0,0,0,${S.scan.v})`; sCtx.fillRect(0,2,1,1);
+    oCtx.fillStyle = oCtx.createPattern(sc, 'repeat'); oCtx.fillRect(0,0,w,h);
+  }
+
+  if(S.glow.v > 0) {
+    let gc = document.createElement('canvas'); gc.width = w; gc.height = h; gc.getContext('2d').drawImage(oc, 0, 0);
+    oCtx.filter = `blur(${Math.round(S.glow.v * 12)}px)`; oCtx.globalCompositeOperation = 'screen';
+    oCtx.globalAlpha = S.glow.v * 0.5; oCtx.drawImage(gc, 0, 0);
+  }
+
+  if(S.vig.v > 0) {
+    oCtx.globalCompositeOperation = 'source-over'; oCtx.globalAlpha = 1; oCtx.filter = 'none';
+    let grad = oCtx.createRadialGradient(cx, cy, 0, cx, cy, Math.hypot(cx, cy));
+    grad.addColorStop(0.5, 'rgba(0,0,0,0)'); grad.addColorStop(1, `rgba(0,0,0,${S.vig.v})`);
+    oCtx.fillStyle = grad; oCtx.fillRect(0,0,w,h);
+  }
+
+  if(isVid && S.decay.v > 0) {
+    ctx.globalAlpha = 1 - S.decay.v; ctx.drawImage(oc, 0, 0);
+  } else {
+    ctx.globalAlpha = 1; ctx.clearRect(0, 0, w, h); ctx.drawImage(oc, 0, 0);
+  }
+}
+
+function save() {
+  let a = document.createElement('a'); a.download = "crt-export.png"; a.href = C.toDataURL("image/png"); a.click();
+}
+</script>
+</body>
+</html>
