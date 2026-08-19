@@ -1,3 +1,3 @@
 # biskuit-homepage.github.io
 "Biskuit" HomePage
-//[Banner](iguessvro_cosmo.jpg)
+//[Banner](iguessvro_cosmo.)
